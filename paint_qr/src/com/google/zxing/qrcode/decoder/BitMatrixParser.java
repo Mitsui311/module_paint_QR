@@ -16,13 +16,16 @@
 
 package com.google.zxing.qrcode.decoder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.zxing.FormatException;
 import com.google.zxing.common.BitMatrix;
 
 /**
  * @author Sean Owen
  */
-final class BitMatrixParser {
+public final class BitMatrixParser {
 
   private final BitMatrix bitMatrix;
   private Version parsedVersion;
@@ -33,7 +36,7 @@ final class BitMatrixParser {
    * @param bitMatrix {@link BitMatrix} to parse
    * @throws FormatException if dimension is not >= 21 and 1 mod 4
    */
-  BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
+  public BitMatrixParser(BitMatrix bitMatrix) throws FormatException {
     int dimension = bitMatrix.getHeight();
     if (dimension < 21 || (dimension & 0x03) != 1) {
       throw FormatException.getFormatInstance();
@@ -150,7 +153,7 @@ final class BitMatrixParser {
    * @return bytes encoded within the QR Code
    * @throws FormatException if the exact number of bytes expected is not read
    */
-  byte[] readCodewords() throws FormatException {
+  public byte[] readCodewords() throws FormatException {
 
     FormatInformation formatInfo = readFormatInformation();
     Version version = readVersion();
@@ -203,6 +206,103 @@ final class BitMatrixParser {
     }
     return result;
   }
+
+
+  // //parserに入れたbitmatrix化したQRコードの白モジュールの座標リストを作成,readCodewordsを参考にして作成
+  public int[][] getwhitemod() throws FormatException {
+
+    Version version = readVersion();
+
+    int dimension = bitMatrix.getHeight();
+
+    BitMatrix functionPattern = version.buildFunctionPattern();
+
+    boolean readingUp = true;
+
+    List<Integer> pos_x = new ArrayList<>();
+		List<Integer> pos_y = new ArrayList<>();
+    // Read columns in pairs, from right to left
+    for (int j = dimension - 1; j > 0; j -= 2) {
+      if (j == 6) {
+        // Skip whole column with vertical alignment pattern;
+        // saves time and makes the other code proceed more cleanly
+        j--;
+      }
+      // Read alternatingly from bottom to top then top to bottom
+      for (int count = 0; count < dimension; count++) {
+        int i = readingUp ? dimension - 1 - count : count;
+        for (int col = 0; col < 2; col++) {
+          // Ignore bits covered by the function pattern
+          if (!functionPattern.get(j - col, i)) {
+            // Read a bit
+
+            if(!bitMatrix.get(j - col, i)){
+              pos_x.add(j - col);
+              pos_y.add(i);
+            }
+          }
+        }
+      }
+      readingUp ^= true; // readingUp = !readingUp; // switch directions
+    }
+
+
+
+    int[] array_pos_x = new int[pos_x.size()];
+    int[] array_pos_y = new int[pos_y.size()];
+
+    for(int i = 0; i < array_pos_x.length; i++){
+      array_pos_x[i] = pos_x.get(i);
+      array_pos_y[i] = pos_y.get(i);
+    }
+
+    int[][] result = {array_pos_x, array_pos_y};
+
+    return result;
+  }
+
+
+  // //parserに入れたbitmatrix化したQRコードのモジュールをリマスクせずに読み取り、ビット列を取得、readCodewordsを参考にして作成 ,未完成
+  public boolean[] readbits() throws FormatException {
+
+    Version version = readVersion();
+
+    int dimension = bitMatrix.getHeight();
+
+    BitMatrix functionPattern = version.buildFunctionPattern();
+
+    boolean readingUp = true;
+    boolean[] result = new boolean[version.getTotalCodewords() * 8 + 10];
+    int bitsRead = 0;
+    // Read columns in pairs, from right to left
+    for (int j = dimension - 1; j > 0; j -= 2) {
+      if (j == 6) {
+        // Skip whole column with vertical alignment pattern;
+        // saves time and makes the other code proceed more cleanly
+        j--;
+      }
+      // Read alternatingly from bottom to top then top to bottom
+      for (int count = 0; count < dimension; count++) {
+        int i = readingUp ? dimension - 1 - count : count;
+        for (int col = 0; col < 2; col++) {
+          // Ignore bits covered by the function pattern
+          if (!functionPattern.get(j - col, i)) {
+            // Read a bit
+            if (bitMatrix.get(j - col, i)) {
+              result[bitsRead] = true;
+            }else{
+              result[bitsRead] = false;
+            }
+            bitsRead++;
+
+          }
+        }
+      }
+      readingUp ^= true; // readingUp = !readingUp; // switch directions
+    }
+    return result;
+  }
+
 
   /**
    * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
