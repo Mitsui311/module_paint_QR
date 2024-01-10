@@ -247,16 +247,75 @@ public final class BitMatrixParser {
     }
 
 
+    int[][] result = new int[pos_x.size()][2];
 
-    int[] array_pos_x = new int[pos_x.size()];
-    int[] array_pos_y = new int[pos_y.size()];
-
-    for(int i = 0; i < array_pos_x.length; i++){
-      array_pos_x[i] = pos_x.get(i);
-      array_pos_y[i] = pos_y.get(i);
+    int count = 0;
+    for(int i = 0; i < result.length; i++){
+        result[i][0] = pos_x.get(count);
+        result[i][1] = pos_y.get(count);
+        count++;
     }
+    return result;
+  }
 
-    int[][] result = {array_pos_x, array_pos_y};
+  // //parserに入れたbitmatrix化したQRコードの白モジュールを0,黒モジュールを1とラベル付けして、
+  // //シンボル毎のモジュールの座標リストを作成,readCodewordsを参考にして作成
+  public int[][][] getmod() throws FormatException {
+
+    Version version = readVersion();
+
+    int dimension = bitMatrix.getHeight();
+
+    BitMatrix functionPattern = version.buildFunctionPattern();
+
+    boolean readingUp = true;
+
+    int resultOffset = 0;
+    int bitsRead = 0;
+    int[][][] result = new int[version.getTotalCodewords()][8][3];
+
+    // Read columns in pairs, from right to left
+    for (int j = dimension - 1; j > 0; j -= 2) {
+      if (j == 6) {
+        // Skip whole column with vertical alignment pattern;
+        // saves time and makes the other code proceed more cleanly
+        j--;
+      }
+      // Read alternatingly from bottom to top then top to bottom
+      for (int count = 0; count < dimension; count++) {
+        int i = readingUp ? dimension - 1 - count : count;
+        for (int col = 0; col < 2; col++) {
+          if(resultOffset == version.getTotalCodewords()){
+            break;
+          }
+          // Ignore bits covered by the function pattern
+          if (!functionPattern.get(j - col, i)) {
+            // Read a bit
+            if(!bitMatrix.get(j - col, i)){
+              //白モジュールは0でラベル付け
+              result[resultOffset][bitsRead][0] = 0;
+              result[resultOffset][bitsRead][1] = j - col;
+              result[resultOffset][bitsRead][2] = i;
+            }else{
+              //黒モジュールは1でラベル付け
+              result[resultOffset][bitsRead][0] = 1;
+              result[resultOffset][bitsRead][1] = j - col;
+              result[resultOffset][bitsRead][2] = i;
+            }
+            bitsRead++;
+            // If we've made a whole byte, save it off
+            if (bitsRead == 8) {
+              resultOffset++;
+              bitsRead = 0;
+            }
+          }
+        }
+      }
+      readingUp ^= true; // readingUp = !readingUp; // switch directions
+    }
+    if (resultOffset != version.getTotalCodewords()) {
+      throw FormatException.getFormatInstance();
+    }
 
     return result;
   }
