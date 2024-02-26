@@ -1,0 +1,42 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
+            "name": "GUIRunner",
+            "request": "launch",
+            "mainClass": "com.google.zxing.client.j2se.GUIRunner",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
+            "name": "HtmlAssetTranslator",
+            "request": "launch",
+            "mainClass": "com.google.zxing.client.j2se.HtmlAssetTranslator",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
+            "name": "StringsResourceTranslator",
+            "request": "launch",
+            "mainClass": "com.google.zxing.client.j2se.StringsResourceTranslator",
+            "projectName": "module_paint_QR_39e682f8"
+        }
+    ]
+}

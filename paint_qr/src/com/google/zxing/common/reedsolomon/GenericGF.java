@@ -117,14 +117,14 @@ public final class GenericGF {
   /**
    * @return 2 to the power of a in GF(size)
    */
-  int exp(int a) {
+  public int exp(int a) {
     return expTable[a];
   }
 
   /**
    * @return base 2 log of a in GF(size)
    */
-  int log(int a) {
+  public int log(int a) {
     if (a == 0) {
       throw new IllegalArgumentException();
     }
@@ -150,6 +150,23 @@ public final class GenericGF {
     }
     return expTable[(logTable[a] + logTable[b]) % (size - 1)];
   }
+
+   //@return b/a
+   int divide(int a, int b) {
+    if (a == 0) {
+      throw new ArithmeticException();
+    }
+    if (b == 0) {
+      return 0;
+    } 
+    
+    if (logTable[b] >= logTable[a]) {
+      return expTable[(logTable[b] - logTable[a]) % (size - 1)];
+    } else {
+      return expTable[(size - 1 + logTable[b] - logTable[a]) % (size - 1)];
+    }
+  }
+
 
   public int getSize() {
     return size;

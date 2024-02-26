@@ -79,6 +79,101 @@ public final class QRCodeWriter implements Writer {
     return renderResult(code, width, height, quietZone);
   }
 
+  //符号語からQRコードを出力
+  public BitMatrix encodecodeword(byte[] codewords,
+                          BarcodeFormat format,
+                          int maskpattern,
+                          int width,
+                          int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
+
+    if (format != BarcodeFormat.QR_CODE) {
+      throw new IllegalArgumentException("Can only encode QR_CODE, but got " + format);
+    }
+
+    if (width < 0 || height < 0) {
+      throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' +
+          height);
+    }
+
+    ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
+    int quietZone = QUIET_ZONE_SIZE;
+    if (hints != null) {
+      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+        errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
+      }
+      if (hints.containsKey(EncodeHintType.MARGIN)) {
+        quietZone = Integer.parseInt(hints.get(EncodeHintType.MARGIN).toString());
+      }
+    }
+
+    QRCode code = Encoder.encodecodeword(codewords, errorCorrectionLevel, maskpattern, hints);
+    return renderResult(code, width, height, quietZone);
+  }
+
+  //contentsをQRコードの符号化過程で符号化し、１シンボル1byteの符号語として出力
+  public byte[] encodebytearray(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
+
+    if (contents.isEmpty()) {
+      throw new IllegalArgumentException("Found empty contents");
+    }
+
+    if (format != BarcodeFormat.QR_CODE) {
+      throw new IllegalArgumentException("Can only encode QR_CODE, but got " + format);
+    }
+
+    if (width < 0 || height < 0) {
+      throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' +
+          height);
+    }
+
+    ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
+    if (hints != null) {
+      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+        errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
+      }
+    }
+
+    byte[] code = Encoder.encodebytearray(contents, errorCorrectionLevel, hints);
+    return code;
+  }
+
+
+  //contentsをQRコードの符号化過程で符号化し、１シンボル1byteのデータコード語として出力
+  public byte[] encodedatacodeword(String contents,
+                          BarcodeFormat format,
+                          int width,
+                          int height,
+                          Map<EncodeHintType,?> hints) throws WriterException {
+
+    if (contents.isEmpty()) {
+      throw new IllegalArgumentException("Found empty contents");
+    }
+
+    if (format != BarcodeFormat.QR_CODE) {
+      throw new IllegalArgumentException("Can only encode QR_CODE, but got " + format);
+    }
+
+    if (width < 0 || height < 0) {
+      throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' +
+          height);
+    }
+
+    ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
+    if (hints != null) {
+      if (hints.containsKey(EncodeHintType.ERROR_CORRECTION)) {
+        errorCorrectionLevel = ErrorCorrectionLevel.valueOf(hints.get(EncodeHintType.ERROR_CORRECTION).toString());
+      }
+    }
+
+    byte[] code = Encoder.encodedatacodeword(contents, errorCorrectionLevel, hints);
+    return code;
+  }
+
   // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
   // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
   private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
