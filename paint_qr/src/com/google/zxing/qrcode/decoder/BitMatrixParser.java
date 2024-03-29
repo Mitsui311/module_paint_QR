@@ -321,17 +321,19 @@ public final class BitMatrixParser {
   }
 
 
-  // //parserに入れたbitmatrix化したQRコードのモジュールをリマスクせずに読み取り、ビット列を取得、readCodewordsを参考にして作成 ,未完成
-  public boolean[] readbits() throws FormatException {
+  // 1シンボルを構成するモジュールの座標(BitMatrixParserでは1座標で1モジュールを表している)をそれぞれ配列としてまとめる
+  public int[][][] ModuleToSymbol() throws FormatException {
 
     Version version = readVersion();
+
+    int[][][] AllSymbol = new int[version.getTotalCodewords()][8][2];
 
     int dimension = bitMatrix.getHeight();
 
     BitMatrix functionPattern = version.buildFunctionPattern();
 
     boolean readingUp = true;
-    boolean[] result = new boolean[version.getTotalCodewords() * 8 + 10];
+    int resultOffset = 0;
     int bitsRead = 0;
     // Read columns in pairs, from right to left
     for (int j = dimension - 1; j > 0; j -= 2) {
@@ -345,21 +347,25 @@ public final class BitMatrixParser {
         int i = readingUp ? dimension - 1 - count : count;
         for (int col = 0; col < 2; col++) {
           // Ignore bits covered by the function pattern
-          if (!functionPattern.get(j - col, i)) {
-            // Read a bit
-            if (bitMatrix.get(j - col, i)) {
-              result[bitsRead] = true;
-            }else{
-              result[bitsRead] = false;
-            }
+          if (!functionPattern.get(j - col, i) && resultOffset < version.getTotalCodewords()) {
+            AllSymbol[resultOffset][bitsRead][0] = j - col;
+            AllSymbol[resultOffset][bitsRead][1] = i;
             bitsRead++;
-
+           
+            if (bitsRead == 8) {
+              resultOffset++;
+              bitsRead = 0;
+              
+            }
           }
         }
       }
       readingUp ^= true; // readingUp = !readingUp; // switch directions
     }
-    return result;
+    if (resultOffset != version.getTotalCodewords()) {
+      throw FormatException.getFormatInstance();
+    }
+    return AllSymbol;
   }
 
 
