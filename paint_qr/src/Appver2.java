@@ -34,11 +34,11 @@ import com.google.zxing.qrcode.detector.Detector;
 
 
 
-public class App {
+public class Appver2 {
     public static void main(String[] args) throws Exception {
         //// QRコード生成
-        String content1 = "https://www.kobe-u.ac.jp/";
-		Analysis analysis = new Analysis();
+        String content1 = "https://www.ntt-east.co.jp/";
+		Analysisver2 analysis = new Analysisver2();
 
 		//----------------------------------------------------------------
 
@@ -109,7 +109,7 @@ public class App {
 
 		//---------------------------------------------------------------------
 
-		String content2 = "https://www.kobe-niku.jp/";
+		String content2 = "https://www.ntt-west.co.jp/";
 
 		byte[] content1byte = analysis.codeword(content1);
 		byte[] datacodeword1 = analysis.datacodeword(content1);
@@ -158,12 +158,11 @@ public class App {
 		System.out.println();
 
 		////消失誤り訂正を利用して、消失点を総当たりしながら符号語を生成
-		int twos = 15;
+		int twos = 10;
 		int count = 0;
 		List<int[]> resultlist= new ArrayList <>();
 		int[] result = new int[xorint.length];
 		ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
-		boolean break1 = false;
 
 		for(int k1 = datacodeword2.length; k1 < xorint.length - 7; k1++){
 			for(int k2 = k1 + 1; k2 < xorint.length - 6; k2++){
@@ -187,20 +186,6 @@ public class App {
 
 											int EC = decoder.erasedecodeWithECCount(xorintcopy, eraseposition, twos);
 
-											for(int i = 0; i < xorintcopy.length; i++){
-												xorintcopy2[i] = xorintcopy[i];
-											}
-
-											xorintcopy2[0] = 1;
-											xorintcopy2[1] = 1;
-											xorintcopy2[2] = 1;
-											xorintcopy2[3] = 1;
-											xorintcopy2[4] = 1;
-											xorintcopy2[5] = 1;
-											xorintcopy2[6] = 1;
-											
-
-											int EC2 = decoder.decodeWithECCount(xorintcopy2, twos);
 
 											int symbolcount = 0;
 											boolean check = true;
@@ -212,11 +197,9 @@ public class App {
 													check = false;
 												}
 											}
-											if((symbolcount == 16)&&(check == true)){
+											if((symbolcount == 12)&&(check == true)){
 
 												resultlist.add(xorintcopy);
-												break1 = true;
-												break;
 
 											}
 
@@ -224,37 +207,13 @@ public class App {
 										}catch(Exception e){
 											System.err.println(false);
 										}
-																		
-										if(break1 == true){
-											break;
-										}
-									}
-									if(break1 == true){
-										break;
+
 									}
 								}
-								if(break1 == true){
-									break;
-								}
-							}
-							if(break1 == true){
-								break;
 							}
 						}
-						if(break1 == true){
-							break;
-						}
-					}
-					if(break1 == true){
-						break;
 					}
 				}
-				if(break1 == true){
-					break;
-				}
-			}
-			if(break1 == true){
-				break;
 			}
 		}	
 
@@ -280,10 +239,10 @@ public class App {
 		}
 		
 		
-		for(int i = 0; i < resultlist.size(); i++){
+		for(int i = 0; i < resultlist_nodup.size(); i++){
 			System.out.print("resultlist" + i + ":");
-			for(int j = 0; j < resultlist.get(i).length; j++){
-				int[] intarray = resultlist.get(i);
+			for(int j = 0; j < resultlist_nodup.get(i).length; j++){
+				int[] intarray = resultlist_nodup.get(i);
 				System.out.print(intarray[j] + " ");
 			}
 			System.out.println();
@@ -294,27 +253,26 @@ public class App {
 		System.out.println("arrangesize:" + resultlist_nodup.size());
 
 
-		// int num = 0;
-		// for(int i = 0; i < resultlist_nodup.size(); i++){
-		// 	int count1 = 0;
-		// 	for(int j = 0; j < resultlist_nodup.get(i).length; j++){
-		// 		int[] intarray = resultlist_nodup.get(i);
-		// 		if(analysis.count1((byte)intarray[j]) == 1){
-		// 			count1++;
-		// 		}
-		// 	}
-		// 	if (count1 == 1) {
-		// 		num++;
-		// 		if(num == 1){
-		// 			result = resultlist_nodup.get(i);
+		int num = 0;
+		for(int i = 0; i < resultlist_nodup.size(); i++){
+			int count1 = 0;
+			for(int j = 0; j < resultlist_nodup.get(i).length; j++){
+				int[] intarray = resultlist_nodup.get(i);
+				if(analysis.count1((byte)intarray[j]) == 1){
+					count1++;
+				}
+			}
+			if (count1 == 3) {
+				num++;
+				if(num == 1){
+					result = resultlist_nodup.get(i);
 					
-		// 		}
-		// 	}
-		// }
+				}
+			}
+		}
 
-		// System.out.println("num:" + num);
+		System.out.println("num:" + num);
 
-		result = resultlist_nodup.get(0);
 		
 
 		System.out.print("result:");

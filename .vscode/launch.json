@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Appnomal",
+            "request": "launch",
+            "mainClass": "Appnomal",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
+            "name": "Appver4",
+            "request": "launch",
+            "mainClass": "Appver4",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
+            "name": "Appver3",
+            "request": "launch",
+            "mainClass": "Appver3",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
+            "name": "Appver2",
+            "request": "launch",
+            "mainClass": "Appver2",
+            "projectName": "module_paint_QR_39e682f8"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
