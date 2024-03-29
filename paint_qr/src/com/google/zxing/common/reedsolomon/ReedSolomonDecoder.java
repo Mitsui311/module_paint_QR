@@ -198,6 +198,21 @@ public final class ReedSolomonDecoder {
       }
       received[erasepos] = GenericGF.addOrSubtract(received[erasepos], eraseMagnitudes[i]);
     }
+
+    GenericGFPoly poly2 = new GenericGFPoly(field, received);
+
+    int[] syndromecheck = new int[twoS];
+    boolean noErrorcheck = true;
+    for (int i = 0; i < twoS; i++) {
+      int eval = poly2.evaluateAt(field.exp(i + field.getGeneratorBase()));
+      syndromecheck[syndromecheck.length - 1 - i] = eval;
+      if (eval != 0) {
+        noErrorcheck = false;
+      }
+    }
+    if (!noErrorcheck) {
+      throw new ReedSolomonException("syndrome was not zero");
+    }
   
     return errorLocations.length;
     
