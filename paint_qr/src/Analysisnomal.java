@@ -29,12 +29,12 @@ import com.google.zxing.qrcode.detector.Detector;
 
 public class Analysisnomal {
 
-	int version = 2;
-	ErrorCorrectionLevel eLevel = ErrorCorrectionLevel.M;
+	int version = 1;
+	ErrorCorrectionLevel eLevel = ErrorCorrectionLevel.L;
 	GenericGF field = GenericGF.QR_CODE_FIELD_256;
-	int errorcorrectnum = 8;
+	int errorcorrectnum = 3;
 
-	int mask_pattern1 = 1;
+	int mask_pattern1 = 3;
 
 
 	//文字列からQRコードを生成、バージョン誤り訂正レベルは適宜変更
@@ -48,6 +48,22 @@ public class Analysisnomal {
 		hints.put(EncodeHintType.QR_MASK_PATTERN, mask_pattern1);
 		QRCodeWriter writer = new QRCodeWriter();
 		BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 256, 256, hints);
+		BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
+		ImageIO.write(image, "png", new File(file));
+
+	}
+
+	//符号語からQRコードを生成、バージョン誤り訂正レベルは適宜変更
+	public void genqr2(byte[] codewords, String filename) throws IOException, WriterException{
+		String file = filename + ".png";
+		Map<EncodeHintType, Object> hints = new EnumMap<>(EncodeHintType.class);
+		//誤り訂正レベル
+		hints.put(EncodeHintType.ERROR_CORRECTION, eLevel);
+		//バージョン
+		hints.put(EncodeHintType.QR_VERSION, version);
+
+		QRCodeWriter writer = new QRCodeWriter();
+		BitMatrix bitMatrix = writer.encodecodeword(codewords, BarcodeFormat.QR_CODE, mask_pattern1, 256, 256, hints);
 		BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
 		ImageIO.write(image, "png", new File(file));
 
@@ -222,33 +238,31 @@ public class Analysisnomal {
 
     }
 
-	 // originalqrと比較してdenoiseqrのシンボルがいくつ間違えているかを数える
-    public int error_symbol_count(BufferedImage originalqr, BufferedImage denoiseqr) throws NotFoundException, FormatException{
+	 // qr1とqr2のシンボルがいくつ間違えているかを数える
+    public int error_symbol_count(BufferedImage qr1, BufferedImage qr2) throws NotFoundException, FormatException{
         int errorcount = 0;
         boolean errorSymbol = false;
 
-        LuminanceSource source_original = new BufferedImageLuminanceSource(originalqr);
-        Binarizer binarizer_original = new HybridBinarizer(source_original);
-        BinaryBitmap bitmap_original = new BinaryBitmap(binarizer_original);
+        LuminanceSource source_qr1 = new BufferedImageLuminanceSource(qr1);
+        Binarizer binarizer_qr1 = new HybridBinarizer(source_qr1);
+        BinaryBitmap bitmap_qr1 = new BinaryBitmap(binarizer_qr1);
         
-        LuminanceSource source_denoise = new BufferedImageLuminanceSource(denoiseqr);
-        Binarizer binarizer_denoise = new HybridBinarizer(source_denoise);
-        BinaryBitmap bitmap_denoise = new BinaryBitmap(binarizer_denoise);
+        LuminanceSource source_qr2 = new BufferedImageLuminanceSource(qr2);
+        Binarizer binarizer_qr2 = new HybridBinarizer(source_qr2);
+        BinaryBitmap bitmap_qr2 = new BinaryBitmap(binarizer_qr2);
 
-        DetectorResult detectorResult_original = new Detector(bitmap_original.getBlackMatrix()).detect();
-        BitMatrix bitmatrix_original = detectorResult_original.getBits();
-        DetectorResult detectorResult_denoise = new Detector(bitmap_denoise.getBlackMatrix()).detect();
-        BitMatrix bitmatrix_denoise = detectorResult_denoise.getBits();
+        DetectorResult detectorResult_qr1 = new Detector(bitmap_qr1.getBlackMatrix()).detect();
+        BitMatrix bitmatrix_qr1 = detectorResult_qr1.getBits();
+        DetectorResult detectorResult_qr2 = new Detector(bitmap_qr2.getBlackMatrix()).detect();
+        BitMatrix bitmatrix_qr2 = detectorResult_qr2.getBits();
 
-        BitMatrixParser parser_original = new BitMatrixParser(bitmatrix_original);
+        BitMatrixParser parser_qr1 = new BitMatrixParser(bitmatrix_qr1);
 
-        
-
-        int[][][] Symbol = parser_original.ModuleToSymbol();
+        int[][][] Symbol = parser_qr1.ModuleToSymbol();
 
         for(int i = 0; i < Symbol.length; i++){
             for(int j = 0; j < Symbol[i].length; j++){
-                if(bitmatrix_denoise.get(Symbol[i][j][0], Symbol[i][j][1]) != bitmatrix_original.get(Symbol[i][j][0], Symbol[i][j][1])){
+                if(bitmatrix_qr2.get(Symbol[i][j][0], Symbol[i][j][1]) != bitmatrix_qr1.get(Symbol[i][j][0], Symbol[i][j][1])){
                     errorSymbol = true;
                 }
             }
@@ -257,67 +271,62 @@ public class Analysisnomal {
                 errorSymbol = false;
             }
         }
-        
-        
         return errorcount;
     }
 
-    // originalqrと比較してdenoiseqrの間違えたシンボルを抽出する
-     public BufferedImage error_symbol_pos(BufferedImage originalqr, BufferedImage denoiseqr) throws NotFoundException, FormatException{
+	//2つのQRコードの異なるシンボルの内、遷移前のモジュールを塗りつぶす(白から黒にする)と
+	//シンボルが遷移後のシンボルになるシンボル数を数える
+	public int change_symbol_count(BufferedImage qr1, BufferedImage qr2) throws NotFoundException, FormatException{
+		int changecount = 0;
+		int notchange = 0;
+		int errorcount = 0;
 
-        int box_size = 8;
-        int margin = 2;
+		//遷移可能ならtrueのまま、不可ならfalseになる
+		boolean changesymbol = true;
 
+		boolean errorSymbol = false;
 
-        LuminanceSource source_original = new BufferedImageLuminanceSource(originalqr);
-        Binarizer binarizer_original = new HybridBinarizer(source_original);
-        BinaryBitmap bitmap_original = new BinaryBitmap(binarizer_original);
+		LuminanceSource source_qr1 = new BufferedImageLuminanceSource(qr1);
+        Binarizer binarizer_qr1 = new HybridBinarizer(source_qr1);
+        BinaryBitmap bitmap_qr1 = new BinaryBitmap(binarizer_qr1);
         
-        LuminanceSource source_denoise = new BufferedImageLuminanceSource(denoiseqr);
-        Binarizer binarizer_denoise = new HybridBinarizer(source_denoise);
-        BinaryBitmap bitmap_denoise = new BinaryBitmap(binarizer_denoise);
+        LuminanceSource source_qr2 = new BufferedImageLuminanceSource(qr2);
+        Binarizer binarizer_qr2 = new HybridBinarizer(source_qr2);
+        BinaryBitmap bitmap_qr2 = new BinaryBitmap(binarizer_qr2);
 
-        DetectorResult detectorResult_original = new Detector(bitmap_original.getBlackMatrix()).detect();
-        BitMatrix bitmatrix_original = detectorResult_original.getBits();
-        DetectorResult detectorResult_denoise = new Detector(bitmap_denoise.getBlackMatrix()).detect();
-        BitMatrix bitmatrix_denoise = detectorResult_denoise.getBits();
+        DetectorResult detectorResult_qr1 = new Detector(bitmap_qr1.getBlackMatrix()).detect();
+        BitMatrix bitmatrix_qr1 = detectorResult_qr1.getBits();
+        DetectorResult detectorResult_qr2 = new Detector(bitmap_qr2.getBlackMatrix()).detect();
+        BitMatrix bitmatrix_qr2 = detectorResult_qr2.getBits();
 
-        BitMatrixParser parser_original = new BitMatrixParser(bitmatrix_original);
+		BitMatrixParser parser_qr1 = new BitMatrixParser(bitmatrix_qr1);
 
-        int[][][] Symbol = parser_original.ModuleToSymbol();
-
-        BitMatrix bitmatrix_error_min = new BitMatrix(bitmatrix_original.getHeight());
-        BitMatrix bitmatrix_error = new BitMatrix((bitmatrix_original.getHeight()) * box_size + 2 * margin * box_size);
+        int[][][] Symbol = parser_qr1.ModuleToSymbol();
 
         for(int i = 0; i < Symbol.length; i++){
             for(int j = 0; j < Symbol[i].length; j++){
-                if(bitmatrix_denoise.get(Symbol[i][j][0], Symbol[i][j][1]) != bitmatrix_original.get(Symbol[i][j][0], Symbol[i][j][1])){
-                    for(int k = 0; k < Symbol[i].length; k++){
-                         bitmatrix_error_min.set(Symbol[i][k][0], Symbol[i][k][1]);
-                    }
+                if(bitmatrix_qr2.get(Symbol[i][j][0], Symbol[i][j][1]) != bitmatrix_qr1.get(Symbol[i][j][0], Symbol[i][j][1])){
+                    errorSymbol = true;
+					if(bitmatrix_qr1.get(Symbol[i][j][0], Symbol[i][j][1])){
+						changesymbol = false;
+					}
                 }
+				
             }
-        }
-
-        for(int i = 0; i < bitmatrix_error_min.getWidth(); i++){
-            for(int j = 0; j < bitmatrix_error_min.getHeight(); j++){
-                if(bitmatrix_error_min.get(i, j)){
-                    for(int i1 = i*box_size + margin * box_size; i1 < i*box_size + margin * box_size + box_size; i1++){
-                        for(int j1 = j*box_size + margin * box_size; j1 < j*box_size + margin * box_size + box_size; j1++){
-                            bitmatrix_error.set(i1, j1);
-                        }
-
-                    }
-                    
-                }
-                
+			if(errorSymbol){
+                errorcount++;
             }
+			if(!changesymbol){
+				notchange++;
+			}
+			errorSymbol = false;
+			changesymbol = true;
         }
+		changecount = errorcount - notchange;
 
-        BufferedImage image = MatrixToImageWriter.toBufferedImage(bitmatrix_error);
+		return changecount;
+	}
 
-        return image;
-     }
 
 	//二つの符号語を比較してbit反転が多いシンボルの場所を探し、符号語1のシンボルを符号語2のシンボルに置き換える
 	//置き換える数はt (= errorcorrectnum)
