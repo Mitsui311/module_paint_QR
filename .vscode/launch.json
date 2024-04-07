@@ -8,6 +8,12 @@
             "type": "java",
             "name": "Appnomal",
             "request": "launch",
+            "mainClass": "Appnomal"
+        },
+        {
+            "type": "java",
+            "name": "Appnomal",
+            "request": "launch",
             "mainClass": "Appnomal",
             "projectName": "module_paint_QR_39e682f8"
         },

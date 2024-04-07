@@ -29,12 +29,12 @@ import com.google.zxing.qrcode.detector.Detector;
 
 public class Analysisnomal {
 
-	int version = 1;
-	ErrorCorrectionLevel eLevel = ErrorCorrectionLevel.L;
+	int version = 2;
+	ErrorCorrectionLevel eLevel = ErrorCorrectionLevel.M;
 	GenericGF field = GenericGF.QR_CODE_FIELD_256;
 	int errorcorrectnum = 3;
 
-	int mask_pattern1 = 3;
+	int mask_pattern1 = 1;
 
 
 	//文字列からQRコードを生成、バージョン誤り訂正レベルは適宜変更
