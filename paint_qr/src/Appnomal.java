@@ -44,7 +44,7 @@ public class Appnomal {
 		Analysisnomal analysis = new Analysisnomal();
 
 		//// QRコード生成
-        String content1 = "http://blmond.jp";
+        String content1 = "http://almond.jp";
 
 		//通常の符号化
 		//--------------------------------------------------------------------------------------------------
@@ -394,33 +394,27 @@ public class Appnomal {
 		analysis.genqr1(content1, "content1");
 
 		byte[] content1byte = analysis.codeword(content1);
+		byte[] content1copy = analysis.codeword(content1);
 		byte[] datacodeword1 = analysis.datacodeword(content1);
-
-		for(int i = 0; i < content1byte.length; i++){
-			System.out.print(content1byte[i] + " ");
-		}
-		System.out.println();
 
 
 		//とりあえず都合の良い誤りを入れてみる
-		// content1byte[9] = (byte) (content1byte[9] + 1);
-		// content1byte[10] = (byte) (content1byte[10] + 1);
-		// content1byte[11] = (byte) (content1byte[11] + 1);
-		// content1byte[12] = (byte) (content1byte[12] + 1);
-		// content1byte[13] = (byte) (content1byte[13] + 1);
-		// content1byte[18] = (byte) (content1byte[18] + 1);
- 		// content1byte[19] = (byte) (content1byte[19] - 1);
-		// content1byte[20] = (byte) (content1byte[20] + 1);
-
-		System.out.println("content1len:" + content1byte.length);
-		System.out.println("datacodeword1len:" + datacodeword1.length);
+		content1copy[9] = (byte) (content1byte[9] + 32);
+		content1copy[10] = (byte) (content1byte[10] + 16);
+		content1copy[11] = (byte) (content1byte[11] - 16);
+		content1copy[12] = (byte) (content1byte[12] - 16);
+		content1copy[13] = (byte) (content1byte[13] + 16);
+		content1copy[14] = (byte) (content1byte[14] + 16);
 
 		for(int i = 0; i < content1byte.length; i++){
 			System.out.print(content1byte[i] + " ");
 		}
 		System.out.println();
 
-		int[] content1int = analysis.tointarray(content1byte);
+		System.out.println("content1len:" + content1byte.length);
+		System.out.println("datacodeword1len:" + datacodeword1.length);		
+
+		int[] content1int = analysis.tointarray(content1copy);
 
 		System.out.println("content1intlen:" + content1int.length);
 
@@ -433,111 +427,114 @@ public class Appnomal {
 		int twos = 16;
 		int count = 0;
 		int addcount = 0;
+		int EC = 0;
 		List<int[]> resultlist= new ArrayList <>();
 		ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+
+		//消失訂正に使うための符号語のコピー
+		int[] content1intcopy = new int[content1int.length];
 
 		//消失点は埋め草コード語のはじまりから符号語の終わりまでで選ぶ
 		//消失点の数はループの数と同じ　
 
-		// for(int k1 = datacodeword1.length + 3; k1 < content1int.length - 9; k1++){
-		// 	for(int k2 = k1 + 1; k2 < content1int.length - 8; k2++){
-		// 		for(int k3 = k2 + 1; k3 < content1int.length - 7; k3++){
-		// 			for(int k4 = k3 + 1; k4 < content1int.length - 6; k4++){
-		// 				for(int k5 = k4 + 1; k5 < content1int.length - 5; k5++){
-		// 					for(int k6 = k5 + 1; k6 < content1int.length - 4; k6++){
-		// 						for(int k7 = k6 + 1; k7 < content1int.length - 3; k7++){
-		// 							for(int k8 = k7 + 1; k8 < content1int.length - 2; k8++){
-		// 								for(int k9 = k8 + 1; k9 < content1int.length - 1; k9++){
-		// 									for(int k10 = k9 + 1; k10 < content1int.length; k10++){
-		// 										count++;
-		// 										System.out.println(count);
+		for(int k1 = datacodeword1.length; k1 < content1int.length - 9; k1++){
+			for(int k2 = k1 + 1; k2 < content1int.length - 8; k2++){
+				for(int k3 = k2 + 1; k3 < content1int.length - 7; k3++){
+					for(int k4 = k3 + 1; k4 < content1int.length - 6; k4++){
+						for(int k5 = k4 + 1; k5 < content1int.length - 5; k5++){
+							for(int k6 = k5 + 1; k6 < content1int.length - 4; k6++){
+								for(int k7 = k6 + 1; k7 < content1int.length - 3; k7++){
+									for(int k8 = k7 + 1; k8 < content1int.length - 2; k8++){
+										for(int k9 = k8 + 1; k9 < content1int.length - 1; k9++){
+											for(int k10 = k9 + 1; k10 < content1int.length; k10++){
+												count++;
+												System.out.println(count);
 			
-		// 										try{
-		// 											//消失点
-		// 											int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10};
-		// 											int[] content1intcopy = new int[content1int.length];
+												try{
+													//消失点
+													int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10};
 													
-		// 											for(int i = 0; i < content1int.length; i++){
-		// 												content1intcopy[i] = content1int[i];
-		// 											}
+													for(int i = 0; i < content1int.length; i++){
+														content1intcopy[i] = content1int[i];
+													}
 
-		// 											int EC = decoder.erasedecodeWithECCount(content1intcopy, eraseposition, twos);
-
-
-		// 											int symbolcount = 0;
-		// 											boolean datacodewordcheck = true;
-		// 											boolean dupcheck = true;
-		// 											for(int i = 0; i < content1intcopy.length; i++){
-		// 												if(content1intcopy[i] != content1int[i]){
-		// 													symbolcount++;
-		// 												}
-		// 												if((i < datacodeword1.length)&&(content1intcopy[i] != content1int[i])){
-		// 													datacodewordcheck = false;
-		// 												}
-		// 											}
-
-		// 											if(resultlist.size() != 0){
-
-		// 												for(int i = 0; i < resultlist.size(); i++){
-		// 													if(Arrays.equals(resultlist.get(i), content1intcopy) == true){
-		// 														dupcheck = false;
-		// 													}
-		// 												}
-
-		// 											}
-		// 											if((symbolcount == 17) && (dupcheck == true)){
-
-		// 												resultlist.add(content1intcopy);
-
-		// 												addcount++;
-		// 												System.out.println(addcount);
-
-		// 											}
+													EC = decoder.erasedecodeWithECCount(content1intcopy, eraseposition, twos);
 
 
-		// 										}catch(Exception e){
-		// 											System.err.println(false);
-		// 										}																	
-		// 									}
-		// 								}
-		// 							}																			
-		// 						}																
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}	
-		// }
+													int symbolcount = 0;
+													boolean datacodewordcheck = true;
+													boolean dupcheck = true;
+													for(int i = 0; i < content1intcopy.length; i++){
+														if(content1intcopy[i] != content1int[i]){
+															symbolcount++;
+														}
+														if((i < datacodeword1.length)&&(content1intcopy[i] != content1int[i])){
+															datacodewordcheck = false;
+														}
+													}
+
+													if(resultlist.size() != 0){
+
+														for(int i = 0; i < resultlist.size(); i++){
+															if(Arrays.equals(resultlist.get(i), content1intcopy) == true){
+																dupcheck = false;
+															}
+														}
+
+													}
+													if((datacodewordcheck == true) && (symbolcount == 17) && (dupcheck == true)){
+
+														resultlist.add(content1intcopy);
+
+														addcount++;
+														System.out.println("addcount:" + addcount);
+
+													}
 
 
-		// //リストをcsvに一旦出力
-		// // 出力ファイルの作成
-		// String file = "resultlist.csv";
-		// FileWriter fw = new FileWriter(file, false);
-		// // PrintWriterクラスのオブジェクトを生成
-		// PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
+												}catch(Exception e){
+													System.err.println(false);
+												}																	
+											}
+										}
+									}																			
+								}																
+							}
+						}
+					}
+				}
+			}	
+		}
 
-		// // データを書き込む
-		// for(int i = 0; i < resultlist.size(); i++){
-		// 	pw.print(i);
-		// 	pw.print(":");
 
-		// 	int[] codeword = resultlist.get(i);
+		//リストをcsvに一旦出力
+		// 出力ファイルの作成
+		String file = "resultlist.csv";
+		FileWriter fw = new FileWriter(file, false);
+		// PrintWriterクラスのオブジェクトを生成
+		PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
 
-		// 	for(int j = 0; j < codeword.length; j++){
+		// データを書き込む
+		for(int i = 0; i < resultlist.size(); i++){
+			pw.print(i);
+			pw.print(":");
+
+			int[] codeword = resultlist.get(i);
+
+			for(int j = 0; j < codeword.length; j++){
 				
-		// 		pw.print(codeword[j]);
-		// 		if(j < codeword.length - 1){
-		// 			pw.print(",");
-		// 		}
-		// 	}
-		// 	pw.println();
+				pw.print(codeword[j]);
+				if(j < codeword.length - 1){
+					pw.print(",");
+				}
+			}
+			pw.println();
 
-		// }
+		}
 		
 
-		// // ファイルを閉じる
-		// pw.close();
+		// ファイルを閉じる
+		pw.close();
 		
 
 
