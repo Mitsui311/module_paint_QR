@@ -414,6 +414,7 @@ public class Appnomal {
 		System.out.println("content1len:" + content1byte.length);
 		System.out.println("datacodeword1len:" + datacodeword1.length);		
 
+		int[] content1intorigin = analysis.tointarray(content1byte);
 		int[] content1int = analysis.tointarray(content1copy);
 
 		System.out.println("content1intlen:" + content1int.length);
@@ -437,67 +438,72 @@ public class Appnomal {
 		//消失点は埋め草コード語のはじまりから符号語の終わりまでで選ぶ
 		//消失点の数はループの数と同じ　
 
-		for(int k1 = datacodeword1.length; k1 < content1int.length - 9; k1++){
-			for(int k2 = k1 + 1; k2 < content1int.length - 8; k2++){
-				for(int k3 = k2 + 1; k3 < content1int.length - 7; k3++){
-					for(int k4 = k3 + 1; k4 < content1int.length - 6; k4++){
-						for(int k5 = k4 + 1; k5 < content1int.length - 5; k5++){
-							for(int k6 = k5 + 1; k6 < content1int.length - 4; k6++){
-								for(int k7 = k6 + 1; k7 < content1int.length - 3; k7++){
-									for(int k8 = k7 + 1; k8 < content1int.length - 2; k8++){
-										for(int k9 = k8 + 1; k9 < content1int.length - 1; k9++){
-											for(int k10 = k9 + 1; k10 < content1int.length; k10++){
-												count++;
-												System.out.println(count);
-			
-												try{
-													//消失点
-													int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10};
-													
-													for(int i = 0; i < content1int.length; i++){
-														content1intcopy[i] = content1int[i];
-													}
+		for(int k1 = datacodeword1.length; k1 < content1int.length - 5; k1++){
+			for(int k2 = k1 + 1; k2 < content1int.length - 4; k2++){
+				for(int k3 = k2 + 1; k3 < content1int.length - 3; k3++){
+					for(int k4 = k3 + 1; k4 < content1int.length - 2; k4++){
+						for(int k5 = k4 + 1; k5 < content1int.length - 1; k5++){
+							for(int k6 = k5 + 1; k6 < content1int.length - 1; k6++){
+								for(int k7 = k6 + 1; k7 < content1int.length; k7++){
+									count++;
+									System.out.println(count);
 
-													EC = decoder.erasedecodeWithECCount(content1intcopy, eraseposition, twos);
+									try{
+										//消失点
+										int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7};
+										
+										for(int i = 0; i < content1int.length; i++){
+											content1intcopy[i] = content1int[i];
+										}
 
+										EC = decoder.erasedecodeWithECCount(content1intcopy, eraseposition, twos);
 
-													int symbolcount = 0;
-													boolean datacodewordcheck = true;
-													boolean dupcheck = true;
-													for(int i = 0; i < content1intcopy.length; i++){
-														if(content1intcopy[i] != content1int[i]){
-															symbolcount++;
-														}
-														if((i < datacodeword1.length)&&(content1intcopy[i] != content1int[i])){
-															datacodewordcheck = false;
-														}
-													}
-
-													if(resultlist.size() != 0){
-
-														for(int i = 0; i < resultlist.size(); i++){
-															if(Arrays.equals(resultlist.get(i), content1intcopy) == true){
-																dupcheck = false;
-															}
-														}
-
-													}
-													if((datacodewordcheck == true) && (symbolcount == 17) && (dupcheck == true)){
-
-														resultlist.add(content1intcopy);
-
-														addcount++;
-														System.out.println("addcount:" + addcount);
-
-													}
+										for(int i = 0; i < content1intcopy.length; i++){
+											System.out.print(content1intcopy[i] + " ");
+										}
+										System.out.println();
 
 
-												}catch(Exception e){
-													System.err.println(false);
-												}																	
+										int symbolcount = 0;
+										boolean datacodewordcheck = true;
+										boolean dupcheck = true;
+										for(int i = 0; i < content1intcopy.length; i++){
+											if(content1intcopy[i] != content1intorigin[i]){
+												symbolcount++;
+											}
+											if((i < datacodeword1.length)&&(content1intcopy[i] != content1int[i])){
+												datacodewordcheck = false;
 											}
 										}
-									}																			
+
+										if(resultlist.size() != 0){
+
+											for(int i = 0; i < resultlist.size(); i++){
+												if(Arrays.equals(resultlist.get(i), content1intcopy) == true){
+													dupcheck = false;
+												}
+											}
+
+										}
+
+										System.out.println("datacodewordcheck:" + datacodewordcheck);
+										System.out.println("symbolcount:" + symbolcount);
+										System.out.println("dupcheck:" + dupcheck);
+
+										if((datacodewordcheck == true) && (symbolcount == 17) && (dupcheck == true)){
+
+											resultlist.add(content1intcopy);
+
+											addcount++;
+											System.out.println("addcount:" + addcount);
+
+										}
+
+
+									}catch(Exception e){
+										System.err.println(false);
+									}		
+																								
 								}																
 							}
 						}
@@ -505,6 +511,8 @@ public class Appnomal {
 				}
 			}	
 		}
+
+		System.out.println(resultlist.size());
 
 
 		//リストをcsvに一旦出力
