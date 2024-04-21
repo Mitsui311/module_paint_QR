@@ -127,260 +127,340 @@ public class Appnomal {
 
 		// int maxchange = 0;
 		// boolean charbreak = false;
-		// for(char c1 = 'b'; c1 <= 'z'; c1++){
-		// 	// for(char c2 = '0'; c2 <= 'z'; c2++){
-		// 	// 	for(char c3 = '0'; c3 <= 'z'; c3++){
-		// 	// 		for(char c4 = '0'; c4 <= 'z'; c4++){
-		// 	// 			for(char c5 = '0'; c5 <= 'z'; c5++){
-		// 	// 				for(char c6 = '0'; c6 <= 'z'; c6++){
+		
 								
 
-		// 						analysis.genqr1(content1, "content1");
-								
-		// 						String content2 = "http://" + String.valueOf(c1) +"lmond.jp";
+		// analysis.genqr1(content1, "content1");
 
-		// 						System.out.println(content2);
+		
 
-		// 						int d1 = analysis.calcdistance1(content1, content2);
-		// 						// System.out.println("d1:" + d1);
+		// String content2 = "http://ilmond.jp";
 
+		// System.out.println(content2);
 
-		// 						byte[] content1byte = analysis.codeword(content1);
-		// 						byte[] datacodeword1 = analysis.datacodeword(content1);
-		// 						byte[] datacodeword1pad = new byte[content1byte.length]; 
-
-		// 						System.out.println(datacodeword1.length);
-								
-		// 						for(int i = 0; i < datacodeword1pad.length; i++){
-		// 							if(i < datacodeword1.length){
-		// 								datacodeword1pad[i] = datacodeword1[i];
-		// 							}else{
-		// 								datacodeword1pad[i] = 0;
-		// 							}
-		// 						}
-								
-		// 						for(int i = 0; i < datacodeword1pad.length; i++){
-		// 							System.out.print(datacodeword1pad[i] + " ");
-		// 						}
-		// 						System.out.println();
-
-		// 						byte[] content2byte = analysis.codeword(content2);
-		// 						byte[] datacodeword2 = analysis.datacodeword(content2);
-		// 						byte[] datacodeword2pad = new byte[content2byte.length]; 
-
-		// 						System.out.println(datacodeword2.length);
-								
-		// 						for(int i = 0; i < datacodeword2pad.length; i++){
-		// 							if(i < datacodeword2.length){
-		// 								datacodeword2pad[i] = datacodeword2[i];
-		// 							}else{
-		// 								datacodeword2pad[i] = 0;
-		// 							}
-		// 						}
-
-		// 						for(int i = 0; i < datacodeword2pad.length; i++){
-		// 							System.out.print(datacodeword2pad[i] + " ");
-		// 						}
-		// 						System.out.println();
-
-		// 						byte[] xor = analysis.codewordplus2(datacodeword1pad, datacodeword2pad);
-		// 						int[] xorint = analysis.tointarray(xor);
-
-		// 						for(int i = 0; i < xorint.length; i++){
-		// 							System.out.print(xorint[i] + " ");
-		// 						}
-		// 						System.out.println();
-
-		// 						//消失誤り訂正を利用して、消失点を総当たりしながら符号語を生成
-		// 						int twos = 16;
-		// 						int count = 0;
-		// 						List<int[]> resultlist= new ArrayList <>();
-		// 						ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
-
-		//						// 埋め草コード後から符号語の終わりまでで消失点を選ぶ、消失点の数はループの数に等しい
-
-		// 						for(int k1 = datacodeword2.length; k1 < xorint.length - 15; k1++){
-		// 							for(int k2 = k1 + 1; k2 < xorint.length - 14; k2++){
-		// 								for(int k3 = k2 + 1; k3 < xorint.length - 13; k3++){
-		// 									for(int k4 = k3 + 1; k4 < xorint.length - 12; k4++){
-		// 										for(int k5 = k4 + 1; k5 < xorint.length - 11; k5++){
-		// 											for(int k6 = k5 + 1; k6 < xorint.length - 10; k6++){
-		// 												for(int k7 = k6 + 1; k7 < xorint.length - 9; k7++){
-		// 													for(int k8 = k7 + 1; k8 < xorint.length - 8; k8++){
-		// 														for(int k9 = k8 + 1; k9 < xorint.length - 7; k9++){
-		// 															for(int k10 = k9 + 1; k10 < xorint.length - 6; k10++){
-		// 																for(int k11 = k10 + 1; k11 < xorint.length - 5; k11++){
-		// 																	for(int k12 = k11 + 1; k12 < xorint.length - 4; k12++){
-		// 																		for(int k13 = k12 + 1; k13 < xorint.length - 3; k13++){
-		// 																			for(int k14 = k13 + 1; k14 < xorint.length - 2; k14++){
-		// 																				for(int k15 = k14 + 1; k15 < xorint.length - 1; k15++){
-		// 																					for(int k16 = k15 + 1; k16 < xorint.length; k16++){
-		// 																						count++;
-		// 																						System.out.println(count);
-															
-		// 																						try{
-		// 																							int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16};
-		// 																							int[] xorintcopy = new int[xorint.length];
-																									
-		// 																							for(int i = 0; i < xorint.length; i++){
-		// 																								xorintcopy[i] = xorint[i];
-		// 																							}
-
-		// 																							int EC = decoder.erasedecodeWithECCount(xorintcopy, eraseposition, twos);
+		// int d1 = analysis.calcdistance1(content1, content2);
+		// // System.out.println("d1:" + d1);
 
 
-		// 																							int symbolcount = 0;
-		// 																							boolean check = true;
-		// 																							for(int i = 0; i < xorintcopy.length; i++){
-		// 																								if(xorintcopy[i] != 0){
-		// 																									symbolcount++;
-		// 																								}
-		// 																								if((i < datacodeword2.length)&&(xorintcopy[i] != xorint[i])){
-		// 																									check = false;
-		// 																								}
-		// 																							}
-		// 																							if((symbolcount == 17)&&(check == true)){
+		// byte[] content1byte = analysis.codeword(content1);
+		// byte[] datacodeword1 = analysis.datacodeword(content1);
+		// byte[] datacodeword1pad = new byte[content1byte.length]; 
 
-		// 																								resultlist.add(xorintcopy);
+		// System.out.println(datacodeword1.length);
 
-		// 																							}
+		// for(int i = 0; i < datacodeword1pad.length; i++){
+		// 	if(i < datacodeword1.length){
+		// 		datacodeword1pad[i] = datacodeword1[i];
+		// 	}else{
+		// 		datacodeword1pad[i] = 0;
+		// 	}
+		// }
+
+		// for(int i = 0; i < datacodeword1pad.length; i++){
+		// 	System.out.print(datacodeword1pad[i] + " ");
+		// }
+		// System.out.println();
+
+		// byte[] content2byte = analysis.codeword(content2);
+		// byte[] datacodeword2 = analysis.datacodeword(content2);
+		// byte[] datacodeword2pad = new byte[content2byte.length]; 
+
+		// System.out.println(datacodeword2.length);
+
+		// for(int i = 0; i < datacodeword2pad.length; i++){
+		// 	if(i < datacodeword2.length){
+		// 		datacodeword2pad[i] = datacodeword2[i];
+		// 	}else{
+		// 		datacodeword2pad[i] = 0;
+		// 	}
+		// }
+
+		// for(int i = 0; i < datacodeword2pad.length; i++){
+		// 	System.out.print(datacodeword2pad[i] + " ");
+		// }
+		// System.out.println();
+
+		// byte[] xor = analysis.codewordplus2(datacodeword1pad, datacodeword2pad);
+		// int[] xorint = analysis.tointarray(xor);
+
+		// for(int i = 0; i < xorint.length; i++){
+		// 	System.out.print(xorint[i] + " ");
+		// }
+		// System.out.println();
+
+		// //消失誤り訂正を利用して、消失点を総当たりしながら符号語を生成
+		// int twos = 16;
+		// int count = 0;
+		// List<int[]> resultlist= new ArrayList <>();
+		// List<int[]> resultlist9_11= new ArrayList <>();
+		// ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+
+		// // 埋め草コード後から符号語の終わりまでで消失点を選ぶ、消失点の数はループの数に等しい
+
+		// for(int k1 = datacodeword2.length; k1 < xorint.length - 15; k1++){
+		// 	for(int k2 = k1 + 1; k2 < xorint.length - 14; k2++){
+		// 		for(int k3 = k2 + 1; k3 < xorint.length - 13; k3++){
+		// 			for(int k4 = k3 + 1; k4 < xorint.length - 12; k4++){
+		// 				for(int k5 = k4 + 1; k5 < xorint.length - 11; k5++){
+		// 					for(int k6 = k5 + 1; k6 < xorint.length - 10; k6++){
+		// 						for(int k7 = k6 + 1; k7 < xorint.length - 9; k7++){
+		// 							for(int k8 = k7 + 1; k8 < xorint.length - 8; k8++){
+		// 								for(int k9 = k8 + 1; k9 < xorint.length - 7; k9++){
+		// 									for(int k10 = k9 + 1; k10 < xorint.length - 6; k10++){
+		// 										for(int k11 = k10 + 1; k11 < xorint.length - 5; k11++){
+		// 											for(int k12 = k11 + 1; k12 < xorint.length - 4; k12++){
+		// 												for(int k13 = k12 + 1; k13 < xorint.length - 3; k13++){
+		// 													for(int k14 = k13 + 1; k14 < xorint.length - 2; k14++){
+		// 														for(int k15 = k14 + 1; k15 < xorint.length - 1; k15++){
+		// 															for(int k16 = k15 + 1; k16 < xorint.length; k16++){
+		// 																count++;
+		// 																if((count%100) == 0){
+		// 																	System.out.println(count);
+		// 																}
+																		
+									
+		// 																try{
+		// 																	int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16};
+		// 																	int[] xorintcopy = new int[xorint.length];
+																			
+		// 																	for(int i = 0; i < xorint.length; i++){
+		// 																		xorintcopy[i] = xorint[i];
+		// 																	}
+
+		// 																	int EC = decoder.erasedecodeWithECCount(xorintcopy, eraseposition, twos);
 
 
-		// 																						}catch(Exception e){
-		// 																							System.err.println(false);
-		// 																						}	
-		// 																					}
-		// 																				}
-		// 																			}
+		// 																	int symbolcount = 0;
+		// 																	boolean check = true;
+		// 																	for(int i = 0; i < xorintcopy.length; i++){
+		// 																		if(xorintcopy[i] != 0){
+		// 																			symbolcount++;
+		// 																		}
+		// 																		if((i < datacodeword2.length)&&(xorintcopy[i] != xorint[i])){
+		// 																			check = false;
 		// 																		}
 		// 																	}
-		// 																}
+
+		// 																	if((symbolcount == 17)&&(check == true)){
+
+		// 																		resultlist.add(xorintcopy);
+
+		// 																	}
+
+
+		// 																}catch(Exception e){
+		// 																	System.err.println(false);
+		// 																}	
 		// 															}
 		// 														}
-		// 													}																			
-		// 												}																
+		// 													}
+		// 												}
 		// 											}
 		// 										}
 		// 									}
 		// 								}
-		// 							}
-		// 						}	
+		// 							}																			
+		// 						}																
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }	
+
+		// //リストをcsvに一旦出力
+		// // 出力ファイルの作成
+		// String csvfile1 = "resultlist.csv";
+		// FileWriter fw1 = new FileWriter(csvfile1, false);
+		// // PrintWriterクラスのオブジェクトを生成
+		// PrintWriter pw1 = new PrintWriter(new BufferedWriter(fw1));
+
+		// // データを書き込む
+		// for(int i = 0; i < resultlist.size(); i++){
+
+		// 	int[] codeword = resultlist.get(i);
+
+		// 	for(int j = 0; j < codeword.length; j++){
+				
+		// 		pw1.print(codeword[j]);
+		// 		if(j < codeword.length - 1){
+		// 			pw1.print(",");
+		// 		}
+		// 	}
+		// 	pw1.println();
+
+		// }
+		// // ファイルを閉じる
+		// pw1.close();
 
 
-		// 						//同じ符号語が重複してリストに入っているので重複した符号語を消去したリストを生成
-		// 						List<int[]> resultlist_nodup = new ArrayList <>();
+		// //保存したcsvからリストを生成。再度探索することなく以降の処理を実行するため	＊制作中
+		// //---------------------------------------------------------------------------------
 
-		// 						// for(int i = 0; i < resultlist.size(); i++){
-
-		// 						// 	if(i == 0){
-		// 						// 		resultlist_nodup.add(resultlist.get(i));
-		// 						// 	}else{
-		// 						// 		boolean dupcheck = true;
-		// 						// 		for(int j = 0; j < resultlist_nodup.size(); j++){
-		// 						// 			if(Arrays.equals(resultlist.get(i), resultlist_nodup.get(j)) == true){
-		// 						// 				dupcheck = false;
-		// 						// 			}
-		// 						// 		}
-
-		// 						// 		if(dupcheck == true){
-		// 						// 			resultlist_nodup.add(resultlist.get(i));
-		// 						// 		}
-		// 						// 	}
-		// 						// }
-
-		// 						System.out.println("resultnum:" + resultlist.size());
-								
-								
-		// 						// for(int i = 0; i < resultlist.size(); i++){
-		// 						// 	System.out.print("resultlist" + i + ":");
-		// 						// 	for(int j = 0; j < resultlist.get(i).length; j++){
-		// 						// 		int[] intarray = resultlist.get(i);
-		// 						// 		System.out.print(intarray[j] + " ");
-		// 						// 	}
-		// 						// 	System.out.println();
-		// 						// }
-		// 						// System.out.println();
+		// // //パスは適宜変更
+		// // Path path = Paths.get("C:\\code\\module_paint_QR\\resultlist.csv");
+		// // try {
+		// //     // CSVファイルの読み込み
+		// //     List<String> lines = Files.readAllLines(path, Charset.forName("Shift-JIS"));
+		// //     for (int i = 1; i < lines.size(); i++) {
+		// //         String[] data = lines.get(i).split(",");
+		// //         if (data.length > 3) {
+		// //             // 読み込んだCSVファイルの内容を出力
+		// //             System.out.print(data[0] + ",");
+		// //             System.out.print(data[1] + ",");
+		// //             System.out.print(data[2] + ",");
+		// //             System.out.println(data[3]);
+		// //         }
+		// //     }
+		// // } catch (IOException e) {
+		// //     System.out.println("ファイル読み込みに失敗");
+		// // }
+		// //---------------------------------------------------------------------------------
 
 
-		// 						byte[] resultbyte = new byte[content1byte.length]; 
 
-		// 						int forcount = 0;
-								
+		// for(int i = 0; i < resultlist.size(); i++){
+		// 	int count1bitsymbol = 0;
+		// 	int count2bitsymbol = 0;
+		// 	int[] codeword = resultlist.get(i);
+			
+		// 	for(int j = 0; j < codeword.length; j++){
+		// 		if(analysis.count1((byte)(codeword[j])) == 1){
+		// 			count1bitsymbol++;
+		// 		}
+		// 		if(analysis.count1((byte)(codeword[j])) == 2){
+		// 			count2bitsymbol++;
+		// 		}
+		// 	}
 
-								
+		// 	int count1_2sum = count1bitsymbol + count2bitsymbol;
+		// 	int changebitsum = count1bitsymbol + 2 * count2bitsymbol;
+		// 	if((count1_2sum >= 9)&&(9 <= changebitsum)&&(changebitsum <= 10)){
+		// 		// resultlist9_11.add(codeword);
 
-		// 						for(int i = 0; i < resultlist.size(); i++){
-		// 							forcount++;
-		// 							System.out.println("tobyte:" + forcount + "/" + resultlist.size());
+		// 		for(int j = 0; j < codeword.length; j++){
+		// 			System.out.print(codeword[j] + " ");
+		// 		}
+		// 		System.out.println();
+
+		// 		byte[] resultbyte = new byte[content1byte.length]; 
+
+		// 		try {
+		// 			for(int j = 0; j < codeword.length; j++){
+		// 				resultbyte[j] = (byte)codeword[j];
+		// 			}
+
+		// 			byte[] content2_1byte = analysis.codewordplus2(resultbyte, content1byte);
+		// 			analysis.genqr2(content2_1byte, "content2");
 
 
-		// 							try {
+		// 			String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
+		// 			String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
 
-		// 								int[] result = resultlist.get(i);
-		// 								for(int j = 0; j < result.length; j++){
-		// 									resultbyte[j] = (byte)result[j];
-		// 								}
+		// 			File file1 = new File(pathname1);
+		// 			BufferedImage image1 = ImageIO.read(file1);
 
-		// 								byte[] content2_1byte = analysis.codewordplus2(resultbyte, content1byte);
-		// 								analysis.genqr2(content2_1byte, "content2");
+		// 			File file2 = new File(pathname2);
+		// 			BufferedImage image2 = ImageIO.read(file2);
+
+		// 			BufferedImage compmod = analysis.comp_module_pos1(image1, image2);
+		// 			ImageIO.write(compmod , "png", new File("compmod.png"));
+
+		// 			BufferedImage wtob = analysis.comp_module_pos2(image1, image2);
+		// 			ImageIO.write(wtob , "png", new File("wtob.png"));
+
+		// 			charbreak = true;
+					
+		// 		} catch (Exception e) {
+		// 			System.err.println(false);
+		// 		}
+		// 	}
+
+		// 	if(charbreak == true){
+		// 		break;
+		// 	}
+		// }
 
 
-		// 								String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
-		// 								String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
+		// // 出力ファイルの作成
+		// String csvfile2 = "resultlist9_11.csv";
+		// FileWriter fw2 = new FileWriter(csvfile2, false);
+		// // PrintWriterクラスのオブジェクトを生成
+		// PrintWriter pw2 = new PrintWriter(new BufferedWriter(fw2));
 
-		// 								File file1 = new File(pathname1);
-		// 								BufferedImage image1 = ImageIO.read(file1);
+		// // データを書き込む
+		// for(int i = 0; i < resultlist9_11.size(); i++){
 
-		// 								File file2 = new File(pathname2);
-		// 								BufferedImage image2 = ImageIO.read(file2);
+		// 	int[] codeword = resultlist9_11.get(i);
 
-		// 								BufferedImage compmod = analysis.comp_module_pos1(image1, image2);
-		// 								ImageIO.write(compmod , "png", new File("compmod.png"));
-								
-		// 								BufferedImage wtob = analysis.comp_module_pos2(image1, image2);
-		// 								ImageIO.write(wtob , "png", new File("wtob.png"));
+		// 	for(int j = 0; j < codeword.length; j++){
+				
+		// 		pw2.print(codeword[j]);
+		// 		if(j < codeword.length - 1){
+		// 			pw2.print(",");
+		// 		}
+		// 	}
+		// 	pw2.println();
 
-		// 								int changesymbolnum = analysis.change_symbol_count(image1, image2);
-		// 								System.out.println("changesym" + i +":" + changesymbolnum);
+		// }
+		// // ファイルを閉じる
+		// pw2.close();
 
-		// 								if(maxchange < changesymbolnum){
-		// 									maxchange = changesymbolnum;
-		// 								}
 
-		// 								if(changesymbolnum >= 9){
-		// 									charbreak = true;
-		// 									break;
-		// 								}
 
-		// 							} catch (Exception e) {
-		// 								System.err.println(false);
-		// 							}
-		// 						}
-								
-		// 						if(charbreak){
-		// 							break;
-		// 						}
-		// 	// 				}
-		// 	// 				if(charbreak){
-		// 	// 					break;
-		// 	// 				}
-		// 	// 			}
-		// 	// 			if(charbreak){
-		// 	// 				break;
-		// 	// 			}
-		// 	// 		}
-		// 	// 		if(charbreak){
-		// 	// 			break;
-		// 	// 		}
-		// 	// 	}
-		// 	// 	if(charbreak){
-		// 	// 		break;
-		// 	// 	}
-		// 	// }
-		// 	// if(charbreak){
-		// 	// 	break;
-		// 	// }
-	    // }
+		// byte[] resultbyte = new byte[content1byte.length]; 
+
+		// int forcount = 0;
+
+		// for(int i = 0; i < resultlist9_11.size(); i++){
+		// 	forcount++;
+		// 	System.out.println("tobyte:" + forcount + "/" + resultlist9_11.size());
+
+
+		// 	try {
+
+		// 		int[] result = resultlist9_11.get(i);
+		// 		for(int j = 0; j < result.length; j++){
+		// 			resultbyte[j] = (byte)result[j];
+		// 		}
+
+		// 		byte[] content2_1byte = analysis.codewordplus2(resultbyte, content1byte);
+		// 		analysis.genqr2(content2_1byte, "content2");
+
+
+		// 		String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
+		// 		String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
+
+		// 		File file1 = new File(pathname1);
+		// 		BufferedImage image1 = ImageIO.read(file1);
+
+		// 		File file2 = new File(pathname2);
+		// 		BufferedImage image2 = ImageIO.read(file2);
+
+		// 		BufferedImage compmod = analysis.comp_module_pos1(image1, image2);
+		// 		ImageIO.write(compmod , "png", new File("compmod.png"));
+
+		// 		BufferedImage wtob = analysis.comp_module_pos2(image1, image2);
+		// 		ImageIO.write(wtob , "png", new File("wtob.png"));
+
+		// 		int changesymbolnum = analysis.change_symbol_count(image1, image2);
+		// 		System.out.println("changesym" + i +":" + changesymbolnum);
+
+		// 		if(maxchange < changesymbolnum){
+		// 			maxchange = changesymbolnum;
+		// 		}
+
+		// 		if(changesymbolnum >= 9){
+		// 			charbreak = true;
+		// 			break;
+		// 		}
+
+		// 	} catch (Exception e) {
+		// 		System.err.println(false);
+		// 	}
+		// }
+
+						
 		
 
 		// System.out.println("maxchange:" + maxchange);
@@ -389,130 +469,156 @@ public class Appnomal {
 
 		//--------------------------------------------------------------------------------------------
 
-		//誤りを入れて探索
+		// //誤りを入れて探索
 
 		analysis.genqr1(content1, "content1");
 
 		byte[] content1byte = analysis.codeword(content1);
-		byte[] content1copy = analysis.codeword(content1);
-		byte[] datacodeword1 = analysis.datacodeword(content1);
+		byte[] content1bytecopy = analysis.codeword(content1);
 
+		// analysis.codewordBinary(content1byte);
 
-		//とりあえず都合の良い誤りを入れてみる
-		content1copy[9] = (byte) (content1byte[9] + 32);
-		content1copy[10] = (byte) (content1byte[10] + 16);
-		content1copy[11] = (byte) (content1byte[11] - 16);
-		content1copy[12] = (byte) (content1byte[12] - 16);
-		content1copy[13] = (byte) (content1byte[13] + 16);
-		content1copy[14] = (byte) (content1byte[14] + 16);
+		// for(int i = 0; i < content1byte.length; i++){
+		// 	System.out.print(content1byte[i] + " ");
+		// }
+		// System.out.println();
 
-		for(int i = 0; i < content1byte.length; i++){
-			System.out.print(content1byte[i] + " ");
-		}
-		System.out.println();
+		// System.out.println("content1len:" + content1byte.length);
 
-		System.out.println("content1len:" + content1byte.length);
-		System.out.println("datacodeword1len:" + datacodeword1.length);		
-
-		int[] content1intorigin = analysis.tointarray(content1byte);
-		int[] content1int = analysis.tointarray(content1copy);
-
-		System.out.println("content1intlen:" + content1int.length);
-
-		for(int i = 0; i < content1int.length; i++){
-			System.out.print(content1int[i] + " ");
-		}
-		System.out.println();
-
+		int[] content1int = new int[content1byte.length];
 
 		int twos = 16;
 		int count = 0;
-		int addcount = 0;
 		int EC = 0;
+		boolean breakcheck = false;
 		List<int[]> resultlist= new ArrayList <>();
 		ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
 
-		//消失訂正に使うための符号語のコピー
-		int[] content1intcopy = new int[content1int.length];
+		//誤りを入れる位置を選んで通常の復号を繰り返すことで符号語を探索
 
-		//消失点は埋め草コード語のはじまりから符号語の終わりまでで選ぶ
-		//消失点の数はループの数と同じ　
+		for(int k1 = 9; k1 < content1byte.length - 8; k1++){
+			for(int k2 = k1 + 1; k2 < content1byte.length - 7; k2++){
+				for(int k3 = k2 + 1; k3 < content1byte.length - 6; k3++){
+					for(int k4 = k3 + 1; k4 < content1byte.length - 5; k4++){
+						for(int k5 = k4 + 1; k5 < content1byte.length - 4; k5++){
+							for(int k6 = k5 + 1; k6 < content1byte.length - 3; k6++){
+								for(int k7 = k6 + 1; k7 < content1byte.length - 2; k7++){
+									for(int k8 = k7 + 1; k8 < content1byte.length - 1; k8++){
+										for(int k9 = k8 + 1; k9 < content1byte.length; k9++){
+											
+											count++;
 
-		for(int k1 = datacodeword1.length; k1 < content1int.length - 5; k1++){
-			for(int k2 = k1 + 1; k2 < content1int.length - 4; k2++){
-				for(int k3 = k2 + 1; k3 < content1int.length - 3; k3++){
-					for(int k4 = k3 + 1; k4 < content1int.length - 2; k4++){
-						for(int k5 = k4 + 1; k5 < content1int.length - 1; k5++){
-							for(int k6 = k5 + 1; k6 < content1int.length - 1; k6++){
-								for(int k7 = k6 + 1; k7 < content1int.length; k7++){
-									count++;
-									System.out.println(count);
-
-									try{
-										//消失点
-										int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7};
-										
-										for(int i = 0; i < content1int.length; i++){
-											content1intcopy[i] = content1int[i];
-										}
-
-										EC = decoder.erasedecodeWithECCount(content1intcopy, eraseposition, twos);
-
-										for(int i = 0; i < content1intcopy.length; i++){
-											System.out.print(content1intcopy[i] + " ");
-										}
-										System.out.println();
+											System.out.println(count);
 
 
-										int symbolcount = 0;
-										boolean datacodewordcheck = true;
-										boolean dupcheck = true;
-										for(int i = 0; i < content1intcopy.length; i++){
-											if(content1intcopy[i] != content1intorigin[i]){
-												symbolcount++;
-											}
-											if((i < datacodeword1.length)&&(content1intcopy[i] != content1int[i])){
-												datacodewordcheck = false;
-											}
-										}
+											int[] errorpos = {k1, k2, k3, k4, k5, k6, k7, k8, k9};
 
-										if(resultlist.size() != 0){
 
-											for(int i = 0; i < resultlist.size(); i++){
-												if(Arrays.equals(resultlist.get(i), content1intcopy) == true){
-													dupcheck = false;
+											for(int m1 = 4; m1 < 8; m1++){
+												for(int m2 = 4; m2 < 8; m2++){
+													for(int m3 = 4; m3 < 8; m3++){
+														for(int m4 = 4; m4 < 8; m4++){
+															for(int m5 = 4; m5 < 8; m5++){
+																for(int m6 = 4; m6 < 8; m6++){
+																	for(int m7 = 4; m7 < 8; m7++){
+																		for(int m8 = 4; m8 < 8; m8++){
+																			for(int m9 = 4; m9 < 8; m9++){
+																
+
+																				int[] errorbit = {m1, m2, m3, m4, m5, m6, m7, m8, m9}; 
+
+																				content1bytecopy = analysis.codeword(content1);
+
+																				for(int i = 0; i < errorpos.length; i++){
+																					content1bytecopy[errorpos[i]] = analysis.bitchange(content1bytecopy[errorpos[i]], errorbit[i]);
+																				}
+																				content1int = analysis.tointarray(content1bytecopy);
+																				try{
+
+																					EC = decoder.decodeWithECCount(content1int, twos);
+																					breakcheck = true;
+									
+																					
+									
+																				}catch(Exception e){
+																					// System.err.println(false);
+																				}
+																				if(breakcheck == true){
+																					break;
+																				}	
+																				
+																			}
+																			if(breakcheck == true){
+																				break;
+																			}	
+																		}
+																		if(breakcheck == true){
+																			break;
+																		}	
+																	}
+																	if(breakcheck == true){
+																		break;
+																	}	
+																}
+																if(breakcheck == true){
+																	break;
+																}	
+															}
+															if(breakcheck == true){
+																break;
+															}	
+														}
+														if(breakcheck == true){
+															break;
+														}	
+													}
+													if(breakcheck == true){
+														break;
+													}	
 												}
+												if(breakcheck == true){
+													break;
+												}	
 											}
-
+											if(breakcheck == true){
+												break;
+											}	
+											
+											
 										}
-
-										System.out.println("datacodewordcheck:" + datacodewordcheck);
-										System.out.println("symbolcount:" + symbolcount);
-										System.out.println("dupcheck:" + dupcheck);
-
-										if((datacodewordcheck == true) && (symbolcount == 17) && (dupcheck == true)){
-
-											resultlist.add(content1intcopy);
-
-											addcount++;
-											System.out.println("addcount:" + addcount);
-
-										}
-
-
-									}catch(Exception e){
-										System.err.println(false);
-									}		
-																								
-								}																
+										if(breakcheck == true){
+											break;
+										}	
+									}
+									if(breakcheck == true){
+										break;
+									}																										
+								}
+								if(breakcheck == true){
+									break;
+								}																	
 							}
+							if(breakcheck == true){
+								break;
+							}	
 						}
+						if(breakcheck == true){
+							break;
+						}	
 					}
+					if(breakcheck == true){
+						break;
+					}	
 				}
-			}	
+				if(breakcheck == true){
+					break;
+				}	
+			}
+			if(breakcheck == true){
+				break;
+			}		
 		}
 
-		System.out.println(resultlist.size());
 
 
 		//リストをcsvに一旦出力
@@ -523,22 +629,19 @@ public class Appnomal {
 		PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
 
 		// データを書き込む
-		for(int i = 0; i < resultlist.size(); i++){
-			pw.print(i);
-			pw.print(":");
 
-			int[] codeword = resultlist.get(i);
 
-			for(int j = 0; j < codeword.length; j++){
-				
-				pw.print(codeword[j]);
-				if(j < codeword.length - 1){
-					pw.print(",");
-				}
+		int[] codeword = content1int;
+
+		for(int j = 0; j < codeword.length; j++){
+			
+			pw.print(codeword[j]);
+			if(j < codeword.length - 1){
+				pw.print(",");
 			}
-			pw.println();
-
 		}
+		pw.println();
+
 		
 
 		// ファイルを閉じる

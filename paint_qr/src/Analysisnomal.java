@@ -381,6 +381,31 @@ public class Analysisnomal {
 
 		return result;
 	}
+
+
+	//bの n bit目を反転する。n = 0~7
+	public byte bitchange(byte b, int n){
+		byte result = 0;
+		if(n == 0){
+			result = (byte)(b ^ 0b00000001);
+		}if (n == 1) {
+			result = (byte)(b ^ 0b00000010);
+		}if (n == 2) {
+			result = (byte)(b ^ 0b00000100);	
+		}if (n == 3) {
+			result = (byte)(b ^ 0b00001000);
+		}if (n == 4) {
+			result = (byte)(b ^ 0b00010000);
+		}if (n == 5) {
+			result = (byte)(b ^ 0b00100000);
+		}if (n == 6) {
+			result = (byte)(b ^ 0b01000000);
+		}if (n == 7) {
+			result = (byte)(b ^ 0b10000000);
+		}
+
+		return result;
+	}
 	
 
 	//byte型をString型で2進数に変更
