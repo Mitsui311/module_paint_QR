@@ -155,7 +155,6 @@ public final class ReedSolomonDecoder {
         // System.out.print(sramda.getDegree() + sramda_array.length - 1 - i);
         sramda_array[i] = sramda.getCoefficient(sramda_array.length - 1 - i);
     }
-      System.out.println();
 
       sramda_unnder2t = new GenericGFPoly(field, sramda_array);
     }
