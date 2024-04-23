@@ -126,6 +126,7 @@ public class Appnomal {
 
 
 		int maxchange = 0;
+		int count = 0;
 		boolean charbreak = false;
 		
 
@@ -157,6 +158,8 @@ public class Appnomal {
 		System.out.println(datacodeword2.length);
 
 		for(int bit = 0; bit < 8; bit++){
+			count++;
+			System.out.println(count);
 
 			for(int i = 0; i < datacodeword2pad.length; i++){
 				if(i < datacodeword2.length){
@@ -188,7 +191,6 @@ public class Appnomal {
 
 			//消失誤り訂正を利用して、消失点を総当たりしながら符号語を生成
 			int twos = 16;
-			int count = 0;
 			List<int[]> resultlist= new ArrayList <>();
 			List<int[]> resultlist9_11= new ArrayList <>();
 			ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
@@ -211,8 +213,6 @@ public class Appnomal {
 																for(int k14 = k13 + 1; k14 < xorint.length - 2; k14++){
 																	for(int k15 = k14 + 1; k15 < xorint.length - 1; k15++){
 																		for(int k16 = k15 + 1; k16 < xorint.length; k16++){
-																			count++;
-																			System.out.println(count);
 				
 																			try{
 																				int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16};
@@ -328,8 +328,8 @@ public class Appnomal {
 					}
 				}
 
-				// int count1_2sum = count1bitsymbol + count2bitsymbol;
-				// int changebitsum = count1bitsymbol + 2 * count2bitsymbol;
+				int count1_2sum = count1bitsymbol + count2bitsymbol;
+				int changebitsum = count1bitsymbol + 2 * count2bitsymbol;
 				if(count1bitsymbol >= 9){
 					// resultlist9_11.add(codeword);
 
@@ -464,7 +464,7 @@ public class Appnomal {
 						
 		
 
-		System.out.println("maxchange:" + maxchange);
+		// System.out.println("maxchange:" + maxchange);
 
 		
 
