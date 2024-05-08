@@ -274,16 +274,20 @@ public class Analysisnomal {
         return errorcount;
     }
 
-	//2つのQRコードの異なるシンボルの内、遷移前のモジュールを塗りつぶす(白から黒にする)と
-	//シンボルが遷移後のシンボルになるシンボル数を数える
-	public int change_symbol_count(BufferedImage qr1, BufferedImage qr2) throws NotFoundException, FormatException{
+	//2つのQRコードの異なるシンボルの内、qr1のモジュールを塗りつぶす(白から黒にする)と
+	//シンボルがqr2のシンボルになるシンボル数を数える[0]
+	//塗りつぶしによって遷移可能なシンボルすべての塗りつぶすモジュールの数を数える[1]
+	public int[] change_symbol_count(BufferedImage qr1, BufferedImage qr2) throws NotFoundException, FormatException{
 		int changecount = 0;
 		int notchange = 0;
 		int errorcount = 0;
+		int paintmod = 0;
+		
 
 		//遷移可能ならtrueのまま、不可ならfalseになる
 		boolean changesymbol = true;
 
+		//異なるシンボルでなければfalse、異なるシンボルであればtrueになる
 		boolean errorSymbol = false;
 
 		LuminanceSource source_qr1 = new BufferedImageLuminanceSource(qr1);
@@ -304,11 +308,18 @@ public class Analysisnomal {
         int[][][] Symbol = parser_qr1.ModuleToSymbol();
 
         for(int i = 0; i < Symbol.length; i++){
+			int paintmodpart = 0;
             for(int j = 0; j < Symbol[i].length; j++){
+				//モジュール単位で精査
                 if(bitmatrix_qr2.get(Symbol[i][j][0], Symbol[i][j][1]) != bitmatrix_qr1.get(Symbol[i][j][0], Symbol[i][j][1])){
                     errorSymbol = true;
+
+					//塗りつぶしによって遷移できるか検証.qr1のモジュールが黒の時点でchangesymbolはfalse
 					if(bitmatrix_qr1.get(Symbol[i][j][0], Symbol[i][j][1])){
 						changesymbol = false;
+					}else{
+					//白だった場合はpaintmodpartに追加
+					paintmodpart++;
 					}
                 }
 				
@@ -318,15 +329,20 @@ public class Analysisnomal {
             }
 			if(!changesymbol){
 				notchange++;
+			}else{
+				paintmod = paintmod + paintmodpart;
 			}
+			
 			errorSymbol = false;
 			changesymbol = true;
         }
 		changecount = errorcount - notchange;
 
-		return changecount;
-	}
 
+		int[] result = {changecount, paintmod};
+
+		return result;
+	}
 
 	//二つの符号語を比較してbit反転が多いシンボルの場所を探し、符号語1のシンボルを符号語2のシンボルに置き換える
 	//置き換える数はt (= errorcorrectnum)
