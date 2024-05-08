@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Apptest",
+            "request": "launch",
+            "mainClass": "Apptest",
+            "projectName": "module_paint_QR_a36a99ca"
+        },
+        {
+            "type": "java",
             "name": "Appnomal",
             "request": "launch",
             "mainClass": "Appnomal"
