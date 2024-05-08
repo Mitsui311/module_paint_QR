@@ -170,7 +170,7 @@ public class Appnomal {
 			}
 
 			// 誤りを入れる
-			datacodeword2pad[9] = analysis.bitchange(datacodeword2pad[9], bit);
+			datacodeword2pad[12] = analysis.bitchange(datacodeword2pad[9], bit);
 
 			// for(int i = 0; i < datacodeword2pad.length; i++){
 			// 	System.out.print(datacodeword2pad[i] + " ");
