@@ -3,13 +3,15 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+
+//いろいろ実験するためのクラス
 public class Apptest {
     public static void main(String[] args) throws Exception {
 
         Analysisnomal analysis = new Analysisnomal();
 
-        String pathname1 = "C:\\Users\\rikut\\gitcode\\module_paint_QR\\content1.png"; 
-        String pathname2 = "C:\\Users\\rikut\\gitcode\\module_paint_QR\\content2.png"; 
+        String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
+        String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
 
         File file1 = new File(pathname1);
         BufferedImage image1 = ImageIO.read(file1);

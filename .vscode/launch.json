@@ -8,6 +8,12 @@
             "type": "java",
             "name": "Apptest",
             "request": "launch",
+            "mainClass": "Apptest"
+        },
+        {
+            "type": "java",
+            "name": "Apptest",
+            "request": "launch",
             "mainClass": "Apptest",
             "projectName": "module_paint_QR_a36a99ca"
         },
