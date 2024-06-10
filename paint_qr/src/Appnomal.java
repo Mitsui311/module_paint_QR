@@ -127,7 +127,6 @@ public class Appnomal {
 
 		int maxchange = 0;
 		int count = 0;
-		boolean charbreak = false;
 		
 
 		analysis.genqr1(content1, "content1");
@@ -147,148 +146,126 @@ public class Appnomal {
 			}
 		}
 
-		// String content2 = "http://almond.jp";
-
-		// System.out.println(content2);
+		String content2 = "https://www.facebook.com/osakacc/";
 
 
-		// byte[] content2byte = analysis.codeword(content2);
-		// byte[] datacodeword2 = analysis.datacodeword(content2);
-		// byte[] datacodeword2pad = new byte[content2byte.length]; 
+		byte[] content2byte = analysis.codeword(content2);
+		byte[] datacodeword2 = analysis.datacodeword(content2);
+		byte[] datacodeword2pad = new byte[content2byte.length]; 
 
-		// System.out.println(datacodeword2.length);
-
-		// for(int bit = 0; bit < 8; bit++){
-		// 	count++;
-		// 	System.out.println(count);
-
-		// 	for(int i = 0; i < datacodeword2pad.length; i++){
-		// 		if(i < datacodeword2.length){
-		// 			datacodeword2pad[i] = datacodeword2[i];
-		// 		}else{
-		// 			datacodeword2pad[i] = 0;
-		// 		}
-		// 	}
-
-		// 	// 誤りを入れる
-		// 	datacodeword2pad[12] = analysis.bitchange(datacodeword2pad[12], bit);
-
-		// 	// for(int i = 0; i < datacodeword2pad.length; i++){
-		// 	// 	System.out.print(datacodeword2pad[i] + " ");
-		// 	// }
-		// 	// System.out.println();
-		
-
-		// 	// System.out.println();
+	
 
 
-		// 	byte[] xor = analysis.codewordplus2(datacodeword1pad, datacodeword2pad);
-		// 	int[] xorint = analysis.tointarray(xor);
+		for(int i = 0; i < datacodeword2pad.length; i++){
+			if(i < datacodeword2.length){
+				datacodeword2pad[i] = datacodeword2[i];
+			}else{
+				datacodeword2pad[i] = 0;
+			}
+		}
 
-		// 	for(int i = 0; i < xorint.length; i++){
-		// 		System.out.print(xorint[i] + " ");
-		// 	}
-		// 	System.out.println();
+		for(int i = 0; i < datacodeword2pad.length; i++){
+			System.out.print(datacodeword2pad[i] + " ");
+		}
+		System.out.println();
+	
 
 
-		// 	// 消失誤り訂正を利用して、消失点を総当たりしながら符号語を生成
-		// 	int twos = 16;
-		// 	List<int[]> resultlist= new ArrayList <>();
-		// 	List<int[]> resultlist9_11= new ArrayList <>();
-		// 	ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+		byte[] xor = analysis.codewordplus2(datacodeword1pad, datacodeword2pad);
+		int[] xorint = analysis.tointarray(xor);
 
-		// 	// 埋め草コード後から符号語の終わりまでで消失点を選ぶ、消失点の数はループの数に等しい
+		for(int i = 0; i < xorint.length; i++){
+			System.out.print(xorint[i] + " ");
+		}
+		System.out.println();
 
-		// 	for(int k1 = datacodeword2.length; k1 < xorint.length - 15; k1++){
-		// 		for(int k2 = k1 + 1; k2 < xorint.length - 14; k2++){
-		// 			for(int k3 = k2 + 1; k3 < xorint.length - 13; k3++){
-		// 				for(int k4 = k3 + 1; k4 < xorint.length - 12; k4++){
-		// 					for(int k5 = k4 + 1; k5 < xorint.length - 11; k5++){
-		// 						for(int k6 = k5 + 1; k6 < xorint.length - 10; k6++){
-		// 							for(int k7 = k6 + 1; k7 < xorint.length - 9; k7++){
-		// 								for(int k8 = k7 + 1; k8 < xorint.length - 8; k8++){
-		// 									for(int k9 = k8 + 1; k9 < xorint.length - 7; k9++){
-		// 										for(int k10 = k9 + 1; k10 < xorint.length - 6; k10++){
-		// 											for(int k11 = k10 + 1; k11 < xorint.length - 5; k11++){
-		// 												for(int k12 = k11 + 1; k12 < xorint.length - 4; k12++){
-		// 													for(int k13 = k12 + 1; k13 < xorint.length - 3; k13++){
-		// 														for(int k14 = k13 + 1; k14 < xorint.length - 2; k14++){
-		// 															for(int k15 = k14 + 1; k15 < xorint.length - 1; k15++){
-		// 																for(int k16 = k15 + 1; k16 < xorint.length; k16++){
+
+		// 消失誤り訂正を利用して、消失点を総当たりしながら符号語を生成
+		int twos = 16;
+		List<int[]> resultlist= new ArrayList <>();
+		List<int[]> resultlist9_11= new ArrayList <>();
+		ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+
+		// 埋め草コード後から符号語の終わりまでで消失点を選ぶ、消失点の数はループの数に等しい
+
+		for(int k1 = datacodeword2.length; k1 < xorint.length - 8; k1++){
+			System.out.print(k1 + " ");
+			for(int k2 = k1 + 1; k2 < xorint.length - 7; k2++){
+				for(int k3 = k2 + 1; k3 < xorint.length - 6; k3++){
+					for(int k4 = k3 + 1; k4 < xorint.length - 5; k4++){
+						for(int k5 = k4 + 1; k5 < xorint.length - 4; k5++){
+							for(int k6 = k5 + 1; k6 < xorint.length - 3; k6++){
+								for(int k7 = k6 + 1; k7 < xorint.length - 2; k7++){
+									for(int k8 = k7 + 1; k8 < xorint.length - 1; k8++){
+										for(int k9 = k8 + 1; k9 < xorint.length; k9++){
+			
+											try{
+												int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9};
+												int[] xorintcopy = new int[xorint.length];
+												
+												for(int i = 0; i < xorint.length; i++){
+													xorintcopy[i] = xorint[i];
+												}
+
+												int EC = decoder.erasedecodeWithECCount(xorintcopy, eraseposition, twos);
+
+
+												int symbolcount = 0;
+												boolean check = true;
+												for(int i = 0; i < xorintcopy.length; i++){
+													if(xorintcopy[i] != 0){
+														symbolcount++;
+													}
+													if((i < datacodeword2.length)&&(xorintcopy[i] != xorint[i])){
+														check = false;
+													}
+												}
+
+												if((symbolcount == 16)&&(check == true)){
+
+													resultlist.add(xorintcopy);
+
+												}
+
+
+											}catch(Exception e){
+												// System.err.println(false);
+											}	
+										}
+									}																			
+								}																
+							}
+						}
+					}
+				}
+			}
+		}	
+		System.out.println();
+
+		//リストをcsvに一旦出力
+		// 出力ファイルの作成
+		String csvfile1 = "resultlist.csv";
+		FileWriter fw1 = new FileWriter(csvfile1, false);
+		// PrintWriterクラスのオブジェクトを生成
+		PrintWriter pw1 = new PrintWriter(new BufferedWriter(fw1));
+
+		// データを書き込む
+		for(int i = 0; i < resultlist.size(); i++){
+
+			int[] codeword = resultlist.get(i);
+
+			for(int j = 0; j < codeword.length; j++){
 				
-		// 																	try{
-		// 																		int[] eraseposition = {k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16};
-		// 																		int[] xorintcopy = new int[xorint.length];
-																				
-		// 																		for(int i = 0; i < xorint.length; i++){
-		// 																			xorintcopy[i] = xorint[i];
-		// 																		}
+				pw1.print(codeword[j]);
+				if(j < codeword.length - 1){
+					pw1.print(",");
+				}
+			}
+			pw1.println();
 
-		// 																		int EC = decoder.erasedecodeWithECCount(xorintcopy, eraseposition, twos);
-
-
-		// 																		int symbolcount = 0;
-		// 																		boolean check = true;
-		// 																		for(int i = 0; i < xorintcopy.length; i++){
-		// 																			if(xorintcopy[i] != 0){
-		// 																				symbolcount++;
-		// 																			}
-		// 																			if((i < datacodeword2.length)&&(xorintcopy[i] != xorint[i])){
-		// 																				check = false;
-		// 																			}
-		// 																		}
-
-		// 																		if((symbolcount == 17)&&(check == true)){
-
-		// 																			resultlist.add(xorintcopy);
-
-		// 																		}
-
-
-		// 																	}catch(Exception e){
-		// 																		// System.err.println(false);
-		// 																	}	
-		// 																}
-		// 															}
-		// 														}
-		// 													}
-		// 												}
-		// 											}
-		// 										}
-		// 									}
-		// 								}																			
-		// 							}																
-		// 						}
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}	
-
-		// 	// //リストをcsvに一旦出力
-		// 	// // 出力ファイルの作成
-		// 	// String csvfile1 = "resultlist.csv";
-		// 	// FileWriter fw1 = new FileWriter(csvfile1, false);
-		// 	// // PrintWriterクラスのオブジェクトを生成
-		// 	// PrintWriter pw1 = new PrintWriter(new BufferedWriter(fw1));
-
-		// 	// // データを書き込む
-		// 	// for(int i = 0; i < resultlist.size(); i++){
-
-		// 	// 	int[] codeword = resultlist.get(i);
-
-		// 	// 	for(int j = 0; j < codeword.length; j++){
-					
-		// 	// 		pw1.print(codeword[j]);
-		// 	// 		if(j < codeword.length - 1){
-		// 	// 			pw1.print(",");
-		// 	// 		}
-		// 	// 	}
-		// 	// 	pw1.println();
-
-		// 	// }
-		// 	// // ファイルを閉じる
-		// 	// pw1.close();
+		}
+		// ファイルを閉じる
+		pw1.close();
 
 
 		// 	// //保存したcsvからリストを生成。再度探索することなく以降の処理を実行するため	＊制作中
@@ -314,159 +291,62 @@ public class Appnomal {
 		// 	// }
 		// 	//---------------------------------------------------------------------------------
 
+		// byte[] resultbyte = new byte[content1byte.length]; 
+
+		// int forcount = 0;
+
+		// for(int i = 0; i < resultlist9_11.size(); i++){
+		// 	forcount++;
+		// 	System.out.println("tobyte:" + forcount + "/" + resultlist9_11.size());
 
 
-		// 	for(int i = 0; i < resultlist.size(); i++){
-		// 		int count1bitsymbol = 0;
-		// 		int count2bitsymbol = 0;
-		// 		int[] codeword = resultlist.get(i);
-				
-		// 		for(int j = 0; j < codeword.length; j++){
-		// 			if(analysis.count1((byte)(codeword[j])) == 1){
-		// 				count1bitsymbol++;
-		// 			}
-		// 			if(analysis.count1((byte)(codeword[j])) == 2){
-		// 				count2bitsymbol++;
-		// 			}
+		// 	try {
+
+		// 		int[] result = resultlist9_11.get(i);
+		// 		for(int j = 0; j < result.length; j++){
+		// 			resultbyte[j] = (byte)result[j];
 		// 		}
 
-		// 		int count1_2sum = count1bitsymbol + count2bitsymbol;
-		// 		int changebitsum = count1bitsymbol + 2 * count2bitsymbol;
-		// 		if(count1bitsymbol >= 9){
-		// 			// resultlist9_11.add(codeword);
-
-		// 			for(int j = 0; j < codeword.length; j++){
-		// 				System.out.print(codeword[j] + " ");
-		// 			}
-		// 			System.out.println();
-
-		// 			byte[] resultbyte = new byte[content1byte.length]; 
-
-		// 			try {
-		// 				for(int j = 0; j < codeword.length; j++){
-		// 					resultbyte[j] = (byte)codeword[j];
-		// 				}
-
-		// 				byte[] content2_1byte = analysis.codewordplus2(resultbyte, content1byte);
-		// 				analysis.genqr2(content2_1byte, "content2");
+		// 		byte[] content2_1byte = analysis.codewordplus2(resultbyte, content1byte);
+		// 		analysis.genqr2(content2_1byte, "content2");
 
 
-		// 				String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
-		// 				String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
+		// 		String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
+		// 		String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
 
-		// 				File file1 = new File(pathname1);
-		// 				BufferedImage image1 = ImageIO.read(file1);
+		// 		File file1 = new File(pathname1);
+		// 		BufferedImage image1 = ImageIO.read(file1);
 
-		// 				File file2 = new File(pathname2);
-		// 				BufferedImage image2 = ImageIO.read(file2);
+		// 		File file2 = new File(pathname2);
+		// 		BufferedImage image2 = ImageIO.read(file2);
 
-		// 				BufferedImage compmod = analysis.comp_module_pos1(image1, image2);
-		// 				ImageIO.write(compmod , "png", new File("compmod.png"));
+		// 		BufferedImage compmod = analysis.comp_module_pos1(image1, image2);
+		// 		ImageIO.write(compmod , "png", new File("compmod.png"));
 
-		// 				BufferedImage wtob = analysis.comp_module_pos2(image1, image2);
-		// 				ImageIO.write(wtob , "png", new File("wtob.png"));
+		// 		BufferedImage wtob = analysis.comp_module_pos2(image1, image2);
+		// 		ImageIO.write(wtob , "png", new File("wtob.png"));
 
-		// 				charbreak = true;
-						
-		// 			} catch (Exception e) {
-		// 				System.err.println(false);
-		// 			}
+		// 		int changesymbolnum = analysis.change_symbol_count(image1, image2);
+		// 		System.out.println("changesym" + i +":" + changesymbolnum);
+
+		// 		if(maxchange < changesymbolnum){
+		// 			maxchange = changesymbolnum;
 		// 		}
 
-		// 		if(charbreak == true){
+		// 		if(changesymbolnum >= 9){
+		// 			charbreak = true;
 		// 			break;
 		// 		}
-		// 	}
 
-		// 	if(charbreak == true){
-		// 		break;
+		// 	} catch (Exception e) {
+		// 		System.err.println(false);
 		// 	}
-			
 		// }
-
-
-		// // // 出力ファイルの作成
-		// // String csvfile2 = "resultlist9_11.csv";
-		// // FileWriter fw2 = new FileWriter(csvfile2, false);
-		// // // PrintWriterクラスのオブジェクトを生成
-		// // PrintWriter pw2 = new PrintWriter(new BufferedWriter(fw2));
-
-		// // // データを書き込む
-		// // for(int i = 0; i < resultlist9_11.size(); i++){
-
-		// // 	int[] codeword = resultlist9_11.get(i);
-
-		// // 	for(int j = 0; j < codeword.length; j++){
-				
-		// // 		pw2.print(codeword[j]);
-		// // 		if(j < codeword.length - 1){
-		// // 			pw2.print(",");
-		// // 		}
-		// // 	}
-		// // 	pw2.println();
-
-		// // }
-		// // // ファイルを閉じる
-		// // pw2.close();
-
-
-
-		// // byte[] resultbyte = new byte[content1byte.length]; 
-
-		// // int forcount = 0;
-
-		// // for(int i = 0; i < resultlist9_11.size(); i++){
-		// // 	forcount++;
-		// // 	System.out.println("tobyte:" + forcount + "/" + resultlist9_11.size());
-
-
-		// // 	try {
-
-		// // 		int[] result = resultlist9_11.get(i);
-		// // 		for(int j = 0; j < result.length; j++){
-		// // 			resultbyte[j] = (byte)result[j];
-		// // 		}
-
-		// // 		byte[] content2_1byte = analysis.codewordplus2(resultbyte, content1byte);
-		// // 		analysis.genqr2(content2_1byte, "content2");
-
-
-		// // 		String pathname1 = "C:\\code\\module_paint_QR\\content1.png"; 
-		// // 		String pathname2 = "C:\\code\\module_paint_QR\\content2.png"; 
-
-		// // 		File file1 = new File(pathname1);
-		// // 		BufferedImage image1 = ImageIO.read(file1);
-
-		// // 		File file2 = new File(pathname2);
-		// // 		BufferedImage image2 = ImageIO.read(file2);
-
-		// // 		BufferedImage compmod = analysis.comp_module_pos1(image1, image2);
-		// // 		ImageIO.write(compmod , "png", new File("compmod.png"));
-
-		// // 		BufferedImage wtob = analysis.comp_module_pos2(image1, image2);
-		// // 		ImageIO.write(wtob , "png", new File("wtob.png"));
-
-		// // 		int changesymbolnum = analysis.change_symbol_count(image1, image2);
-		// // 		System.out.println("changesym" + i +":" + changesymbolnum);
-
-		// // 		if(maxchange < changesymbolnum){
-		// // 			maxchange = changesymbolnum;
-		// // 		}
-
-		// // 		if(changesymbolnum >= 9){
-		// // 			charbreak = true;
-		// // 			break;
-		// // 		}
-
-		// // 	} catch (Exception e) {
-		// // 		System.err.println(false);
-		// // 	}
-		// // }
 
 						
 		
 
-		// // System.out.println("maxchange:" + maxchange);
+		// System.out.println("maxchange:" + maxchange);
 
 		
 
